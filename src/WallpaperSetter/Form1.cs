@@ -158,16 +158,16 @@ namespace WallpaperSetter
 
                 Bitmap bi = new Bitmap(ScreenSize.Width, ScreenSize.Height);
 
-                Graphics gg = Graphics.FromImage(bi);
+            using (Graphics gg = Graphics.FromImage(bi))
+            {
+                gg.Clear(domColor.BackColor);
 
-                gg.Clear(this.domColor.BackColor);
-
-                int x = Convert.ToInt32((Convert.ToDouble(start_x) / Convert.ToDouble(CanvasSize.Width)) * ScreenSize.Width);
+                int x = Convert.ToInt32((Convert.ToDouble(start_x)/Convert.ToDouble(CanvasSize.Width))*ScreenSize.Width);
                 int y = 0;
 
                 if (checkBox1.Checked)
                 {
-                    y = Convert.ToInt32((Convert.ToDouble(start_y) / Convert.ToDouble(CanvasSize.Height)) * ScreenSize.Height);
+                    y = Convert.ToInt32((Convert.ToDouble(start_y)/Convert.ToDouble(CanvasSize.Height))*ScreenSize.Height);
                 }
 
                 if (checkBox2.Checked)
@@ -180,8 +180,8 @@ namespace WallpaperSetter
                     gg.DrawImage(raw_wallpaper, x, y, raw_wallpaper.Width, raw_wallpaper.Height);
                 }
 
-                gg.Dispose();
-
+             //   gg.Dispose();
+            }
                 pictureBox1.Image = bi;
             }
         }

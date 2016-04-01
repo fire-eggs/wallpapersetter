@@ -144,19 +144,22 @@ namespace WallpaperSetter
             draw_result();
         }
 
+        private Bitmap bi;
 
         private void draw_result()
         {
-            if (raw_wallpaper != null)
-            {
-                if (pictureBox1.Image != null)
-                {
-                    Image a = pictureBox1.Image;
-                    pictureBox1.Image = null;
-                    a.Dispose();
-                }
+            if (raw_wallpaper == null) return;
+            //if (pictureBox1.Image != null)
+            //{
+            //    Image a = pictureBox1.Image;
+            //    pictureBox1.Image = null;
+            //    a.Dispose();
+            //}
 
-                Bitmap bi = new Bitmap(ScreenSize.Width, ScreenSize.Height);
+            if (bi == null)
+            {
+                bi = new Bitmap(ScreenSize.Width, ScreenSize.Height);
+            }
 
             using (Graphics gg = Graphics.FromImage(bi))
             {
@@ -182,8 +185,7 @@ namespace WallpaperSetter
 
              //   gg.Dispose();
             }
-                pictureBox1.Image = bi;
-            }
+            pictureBox1.Image = bi;
         }
 
         private void btnSetPaper_Click(object sender, EventArgs e)

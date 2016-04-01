@@ -1,60 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+
+// ReSharper disable SuggestUseVarKeywordEvident
+
 namespace WallpaperSetter
 {
     public partial class Form1 : Form
     {
-        private int ScreenWidth
+        private static Size ScreenSize
         {
-            get
-            {
-                return Screen.PrimaryScreen.Bounds.Width;
-            }
-        }
-
-        private int ScreenHeight
-        {
-            get
-            {
-                return Screen.PrimaryScreen.Bounds.Height;
-            }
-        }
-        private Size ScreenSize
-        {
-            get { return new Size(this.ScreenWidth, this.ScreenHeight); }
+            get { return new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height); }
         }
         private Size CanvasSize
         {
-            get { return this.pictureBox1.Size; }
+            get { return pictureBox1.Size; }
         }
 
         private bool isl = false;
 
         private Point start;
 
-        private int start_x = 0;
-        private int start_y = 0;
+        private int start_x;
+        private int start_y;
 
-        private Size ScreenSizeInCanvas;
-
-        bool m_MouseDownInEyedropper = false;
+        bool m_MouseDownInEyedropper;
         Bitmap m_ScreenImage;
-        Cursor m_eyeDropperCursor = Utility.CreateColorCursorFromResourceFile("WallpaperSetter.EyeDrop.cur");
+        readonly Cursor m_eyeDropperCursor = Utility.CreateColorCursorFromResourceFile("WallpaperSetter.EyeDrop.cur");
         Point m_cursorLocation;
 
         public Form1()
         {
             InitializeComponent();
 
-            ScreenSizeInCanvas = ScreenSize.ApplyAspect(CanvasSize);
+            //ScreenSizeInCanvas = ScreenSize.ApplyAspect(CanvasSize);
             label2.Text = string.Format("Your screen resolution: {0}x{1}", ScreenSize.Width, ScreenSize.Height);
             this.pictureBox1.MouseDown += (s, e) =>
             {
@@ -90,7 +71,7 @@ namespace WallpaperSetter
                 m_cursorLocation = Utility.GetCursorPostionOnScreen();
                 this.domColor.BackColor = m_ScreenImage.GetPixel(m_cursorLocation.X, m_cursorLocation.Y);
             };
-            this.button4.MouseMove += (s, e) =>
+            button4.MouseMove += (s, e) =>
             {
                 if (m_MouseDownInEyedropper)
                 {
@@ -99,11 +80,11 @@ namespace WallpaperSetter
                     draw_result();
                 }
             };
-            this.button4.MouseUp += (s, e) =>
+            button4.MouseUp += (s, e) =>
             {
                 m_MouseDownInEyedropper = false;
                 m_ScreenImage.Dispose();
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
                 draw_result();
             };
         }
@@ -114,14 +95,14 @@ namespace WallpaperSetter
             {
                 o.Filter = "Image files|*.jpg;*.bmp;*.png;*.jpeg;*.gif";
                 o.CheckFileExists = true;
-                if (o.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (o.ShowDialog() == DialogResult.OK)
                 {
                     load_image(File.ReadAllBytes(o.FileName));
                 }
             }
         }
 
-        private Bitmap raw_wallpaper = null;
+        private Bitmap raw_wallpaper;
 
         private Color dominant_color = Color.Black;
 
@@ -211,7 +192,7 @@ namespace WallpaperSetter
             {
                 string file_name = Path.Combine(Path.GetTempPath(), "wallsetterimage.bmp");
                 MemoryStream mem = new MemoryStream();
-                pictureBox1.Image.Save(mem, System.Drawing.Imaging.ImageFormat.Bmp);
+                pictureBox1.Image.Save(mem, ImageFormat.Bmp);
                 File.WriteAllBytes(file_name, mem.ToArray());
                 mem.Dispose();
                 Wallpaper.SetFromFile(file_name, Wallpaper.Style.Stretched);
@@ -240,10 +221,10 @@ namespace WallpaperSetter
                 {
                     d.Filter = "PNG Images|*.png|JPEG Images|*.jpg";
 
-                    if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    if (d.ShowDialog() == DialogResult.OK)
                     {
                         MemoryStream mem = new MemoryStream();
-                        pictureBox1.Image.Save(mem, d.FileName.EndsWith(".jpg") ? System.Drawing.Imaging.ImageFormat.Jpeg : System.Drawing.Imaging.ImageFormat.Png);
+                        pictureBox1.Image.Save(mem, d.FileName.EndsWith(".jpg") ? ImageFormat.Jpeg : ImageFormat.Png);
                         File.WriteAllBytes(d.FileName, mem.ToArray());
                         mem.Dispose();
                     }
@@ -290,7 +271,7 @@ namespace WallpaperSetter
 
         }
 
-        public static bool is_smaller_than(this System.Drawing.Size a1, System.Drawing.Size a2)
+        public static bool is_smaller_than(this Size a1, Size a2)
         {
             return a1.Height < a2.Height && a1.Width < a2.Width;
         }

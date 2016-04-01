@@ -61,17 +61,17 @@ namespace WallpaperSetter
                 draw_result();
             };
 
-            this.button4.MouseDown += (s, e) =>
+            btnDropper.MouseDown += (s, e) =>
             {
                 m_MouseDownInEyedropper = true;
-                this.Cursor = m_eyeDropperCursor;
+                Cursor = m_eyeDropperCursor;
 
                 m_ScreenImage = Utility.CaptureScreen();
 
                 m_cursorLocation = Utility.GetCursorPostionOnScreen();
                 this.domColor.BackColor = m_ScreenImage.GetPixel(m_cursorLocation.X, m_cursorLocation.Y);
             };
-            button4.MouseMove += (s, e) =>
+            btnDropper.MouseMove += (s, e) =>
             {
                 if (m_MouseDownInEyedropper)
                 {
@@ -80,7 +80,7 @@ namespace WallpaperSetter
                     draw_result();
                 }
             };
-            button4.MouseUp += (s, e) =>
+            btnDropper.MouseUp += (s, e) =>
             {
                 m_MouseDownInEyedropper = false;
                 m_ScreenImage.Dispose();
@@ -89,7 +89,7 @@ namespace WallpaperSetter
             };
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnLoadImage_Click(object sender, EventArgs e)
         {
             using (var o = new OpenFileDialog())
             {
@@ -186,7 +186,7 @@ namespace WallpaperSetter
             }
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void btnSetPaper_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image != null)
             {
@@ -213,7 +213,7 @@ namespace WallpaperSetter
             draw_result();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnSaveFile_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image != null)
             {
@@ -242,7 +242,7 @@ namespace WallpaperSetter
             draw_result();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void btnResetPos_Click(object sender, EventArgs e)
         {
             start_x = 0;
             start_y = 0;

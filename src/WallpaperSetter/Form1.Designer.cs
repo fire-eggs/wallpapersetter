@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLoadImage = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnSetPaper = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnSaveFile = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnDropper = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.domColor = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
+            this.btnResetPos = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -49,15 +49,15 @@
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // btnLoadImage
             // 
-            this.button1.Location = new System.Drawing.Point(12, 640);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Browse";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnLoadImage.Location = new System.Drawing.Point(12, 18);
+            this.btnLoadImage.Name = "btnLoadImage";
+            this.btnLoadImage.Size = new System.Drawing.Size(98, 23);
+            this.btnLoadImage.TabIndex = 0;
+            this.btnLoadImage.Text = "Load Image";
+            this.btnLoadImage.UseVisualStyleBackColor = true;
+            this.btnLoadImage.Click += new System.EventHandler(this.btnLoadImage_Click);
             // 
             // pictureBox1
             // 
@@ -70,15 +70,15 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
-            // button2
+            // btnSetPaper
             // 
-            this.button2.Location = new System.Drawing.Point(99, 640);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Set as wallpaper";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.btnSetPaper.Location = new System.Drawing.Point(127, 19);
+            this.btnSetPaper.Name = "btnSetPaper";
+            this.btnSetPaper.Size = new System.Drawing.Size(98, 23);
+            this.btnSetPaper.TabIndex = 5;
+            this.btnSetPaper.Text = "Set as wallpaper";
+            this.btnSetPaper.UseVisualStyleBackColor = true;
+            this.btnSetPaper.Click += new System.EventHandler(this.btnSetPaper_Click);
             // 
             // checkBox1
             // 
@@ -104,15 +104,15 @@
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // button3
+            // btnSaveFile
             // 
-            this.button3.Location = new System.Drawing.Point(203, 640);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(98, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Save";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnSaveFile.Location = new System.Drawing.Point(12, 50);
+            this.btnSaveFile.Name = "btnSaveFile";
+            this.btnSaveFile.Size = new System.Drawing.Size(98, 23);
+            this.btnSaveFile.TabIndex = 5;
+            this.btnSaveFile.Text = "Save";
+            this.btnSaveFile.UseVisualStyleBackColor = true;
+            this.btnSaveFile.Click += new System.EventHandler(this.btnSaveFile_Click);
             // 
             // groupBox1
             // 
@@ -128,7 +128,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.btnDropper);
             this.groupBox2.Controls.Add(this.panel1);
             this.groupBox2.Controls.Add(this.domColor);
             this.groupBox2.Location = new System.Drawing.Point(495, 641);
@@ -147,14 +147,14 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Computed\r\ndominant color";
             // 
-            // button4
+            // btnDropper
             // 
-            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-            this.button4.Location = new System.Drawing.Point(148, 18);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(58, 30);
-            this.button4.TabIndex = 2;
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnDropper.Image = ((System.Drawing.Image)(resources.GetObject("btnDropper.Image")));
+            this.btnDropper.Location = new System.Drawing.Point(148, 18);
+            this.btnDropper.Name = "btnDropper";
+            this.btnDropper.Size = new System.Drawing.Size(58, 30);
+            this.btnDropper.TabIndex = 2;
+            this.btnDropper.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -175,15 +175,15 @@
             this.domColor.Size = new System.Drawing.Size(135, 30);
             this.domColor.TabIndex = 0;
             // 
-            // button5
+            // btnResetPos
             // 
-            this.button5.Location = new System.Drawing.Point(99, 670);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(98, 23);
-            this.button5.TabIndex = 10;
-            this.button5.Text = "Reset position";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.btnResetPos.Location = new System.Drawing.Point(127, 50);
+            this.btnResetPos.Name = "btnResetPos";
+            this.btnResetPos.Size = new System.Drawing.Size(98, 23);
+            this.btnResetPos.TabIndex = 10;
+            this.btnResetPos.Text = "Reset position";
+            this.btnResetPos.UseVisualStyleBackColor = true;
+            this.btnResetPos.Click += new System.EventHandler(this.btnResetPos_Click);
             // 
             // label2
             // 
@@ -233,19 +233,19 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLoadImage;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnSetPaper;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnSaveFile;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel domColor;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnDropper;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnResetPos;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
     }

@@ -195,7 +195,8 @@ namespace WallpaperSetter
                 }
                 else
                 {
-                    gg.DrawImageUnscaled(raw_wallpaper, new Rectangle(x, y, ScreenSize.Width, ScreenSize.Height));
+                    // Ignore image DPI 
+                    gg.DrawImage(raw_wallpaper, x, y, raw_wallpaper.Width, raw_wallpaper.Height);
                 }
 
                 gg.Dispose();

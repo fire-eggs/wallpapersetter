@@ -1,12 +1,14 @@
-__Modifications in this fork:__
-
-1. Minor code cleanup.
-2. The main window is now resizable.
-3. Handle images with weird DPI values.
-
 A simple program that lets you change the visible portion of a wallpaper so I you can get the canvas that you want to see.
 
 It's very handy, especially when using minimalist wallpapers, or if the wallpaper is larger than your screen.
+
+__Modifications in this fork:__
+
+1. The main window is now resizable.
+2. Handle images with weird DPI values.
+3. Add true 'scale' in addition to existing 'stretch' mode.
+4. 'Dominant' color is actually 'average' color.
+5. Added combobox to pick from *most used* colors.
 
 Example below:
 

@@ -36,7 +36,9 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.btnSaveFile = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkScaleImage = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnDropper = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -103,9 +105,9 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Location = new System.Drawing.Point(6, 35);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(84, 17);
+            this.checkBox2.Size = new System.Drawing.Size(91, 17);
             this.checkBox2.TabIndex = 7;
-            this.checkBox2.Text = "Scale image";
+            this.checkBox2.Text = "Stretch image";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
@@ -121,41 +123,68 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkScaleImage);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.checkBox2);
-            this.groupBox1.Location = new System.Drawing.Point(242, 18);
+            this.groupBox1.Location = new System.Drawing.Point(231, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(181, 55);
+            this.groupBox1.Size = new System.Drawing.Size(128, 79);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
+            // chkScaleImage
+            // 
+            this.chkScaleImage.AutoSize = true;
+            this.chkScaleImage.Location = new System.Drawing.Point(6, 51);
+            this.chkScaleImage.Name = "chkScaleImage";
+            this.chkScaleImage.Size = new System.Drawing.Size(85, 17);
+            this.chkScaleImage.TabIndex = 8;
+            this.chkScaleImage.Text = "Scale Image";
+            this.chkScaleImage.UseVisualStyleBackColor = true;
+            this.chkScaleImage.CheckedChanged += new System.EventHandler(this.chkScaleImage_CheckedChanged);
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.btnDropper);
             this.groupBox2.Controls.Add(this.panel1);
             this.groupBox2.Controls.Add(this.domColor);
-            this.groupBox2.Location = new System.Drawing.Point(441, 19);
+            this.groupBox2.Location = new System.Drawing.Point(376, 19);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(337, 54);
+            this.groupBox2.Size = new System.Drawing.Size(413, 54);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Background Color";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.ItemHeight = 15;
+            this.comboBox1.Location = new System.Drawing.Point(295, 18);
+            this.comboBox1.MaxDropDownItems = 5;
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(112, 21);
+            this.comboBox1.TabIndex = 4;
+            this.comboBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox1_DrawItem);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(212, 18);
+            this.label1.Location = new System.Drawing.Point(173, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 26);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Computed\r\ndominant color";
+            this.label1.Text = "Computed average color";
+            this.label1.UseMnemonic = false;
             // 
             // btnDropper
             // 
             this.btnDropper.Image = ((System.Drawing.Image)(resources.GetObject("btnDropper.Image")));
-            this.btnDropper.Location = new System.Drawing.Point(148, 18);
+            this.btnDropper.Location = new System.Drawing.Point(109, 18);
             this.btnDropper.Name = "btnDropper";
             this.btnDropper.Size = new System.Drawing.Size(58, 30);
             this.btnDropper.TabIndex = 2;
@@ -165,7 +194,7 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel1.Location = new System.Drawing.Point(297, 16);
+            this.panel1.Location = new System.Drawing.Point(255, 18);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(33, 30);
             this.panel1.TabIndex = 1;
@@ -177,7 +206,7 @@
             this.domColor.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.domColor.Location = new System.Drawing.Point(6, 18);
             this.domColor.Name = "domColor";
-            this.domColor.Size = new System.Drawing.Size(135, 30);
+            this.domColor.Size = new System.Drawing.Size(97, 30);
             this.domColor.TabIndex = 0;
             // 
             // btnResetPos
@@ -236,7 +265,8 @@
             this.groupBox3.Controls.Add(this.groupBox2);
             this.groupBox3.Controls.Add(this.btnResetPos);
             this.groupBox3.Controls.Add(this.groupBox1);
-            this.groupBox3.Location = new System.Drawing.Point(3, 347);
+            this.groupBox3.Location = new System.Drawing.Point(0, 344);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(1005, 83);
             this.groupBox3.TabIndex = 5;
@@ -256,7 +286,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -284,6 +313,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox chkScaleImage;
     }
 }
 

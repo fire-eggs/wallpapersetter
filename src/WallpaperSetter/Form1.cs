@@ -29,21 +29,22 @@ namespace WallpaperSetter
         bool m_MouseDownInEyedropper;
         Bitmap m_ScreenImage;
         readonly Cursor m_eyeDropperCursor = Utility.CreateColorCursorFromResourceFile("WallpaperSetter.EyeDrop.cur");
-        Point m_cursorLocation;
 
         public Form1()
         {
+            Point mCursorLocation;
             InitializeComponent();
 
-            //ScreenSizeInCanvas = ScreenSize.ApplyAspect(CanvasSize);
             label2.Text = string.Format("Your screen resolution: {0}x{1}", ScreenSize.Width, ScreenSize.Height);
-            this.pictureBox1.MouseDown += (s, e) =>
+            label3.Text = " ";
+
+            pictureBox1.MouseDown += (s, e) =>
             {
                 isl = true;
                 start = e.Location;
-                this.pictureBox1.Cursor = Cursors.Cross;
+                pictureBox1.Cursor = Cursors.Cross;
             };
-            this.pictureBox1.MouseMove += (s, e) =>
+            pictureBox1.MouseMove += (s, e) =>
             {
                 if (isl)
                 {
@@ -53,11 +54,11 @@ namespace WallpaperSetter
                     draw_result();
                 }
             };
-            this.pictureBox1.MouseUp += (s, e) =>
+            pictureBox1.MouseUp += (s, e) =>
             {
                 isl = false;
                 start = e.Location;
-                this.pictureBox1.Cursor = Cursors.Arrow;
+                pictureBox1.Cursor = Cursors.Arrow;
                 draw_result();
             };
 
@@ -68,15 +69,15 @@ namespace WallpaperSetter
 
                 m_ScreenImage = Utility.CaptureScreen();
 
-                m_cursorLocation = Utility.GetCursorPostionOnScreen();
-                this.domColor.BackColor = m_ScreenImage.GetPixel(m_cursorLocation.X, m_cursorLocation.Y);
+                mCursorLocation = Utility.GetCursorPostionOnScreen();
+                domColor.BackColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
             };
             btnDropper.MouseMove += (s, e) =>
             {
                 if (m_MouseDownInEyedropper)
                 {
-                    m_cursorLocation = Utility.GetCursorPostionOnScreen();
-                    this.domColor.BackColor = m_ScreenImage.GetPixel(m_cursorLocation.X, m_cursorLocation.Y);
+                    mCursorLocation = Utility.GetCursorPostionOnScreen();
+                    domColor.BackColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
                     draw_result();
                 }
             };
@@ -104,7 +105,7 @@ namespace WallpaperSetter
 
         private Bitmap raw_wallpaper;
 
-        private Color dominant_color = Color.Black;
+        private Color averageColor = Color.Black;
 
         private void load_image(byte[] data)
         {
@@ -117,29 +118,18 @@ namespace WallpaperSetter
 
             label3.Text = string.Format("Wallpaper size: {0}x{1}", raw_wallpaper.Width, raw_wallpaper.Height);
 
-            long r = 0;
-            long g = 0;
-            long b = 0;
-            long count = 0;
+            //PictureAnalysis.GetMostUsedColor(raw_wallpaper);
+            PictureAnalysis.Analyze(raw_wallpaper);
+            averageColor = PictureAnalysis.ColorAverage;
 
-            for (int x = 0; x < raw_wallpaper.Width; x++)
+            comboBox1.Items.Clear();
+            foreach (var top10Color in PictureAnalysis.Top10Colors)
             {
-                for (int y = 0; y < raw_wallpaper.Height; y++)
-                {
-                    Color w = raw_wallpaper.GetPixel(x, y);
-                    r += w.R;
-                    g += w.G;
-                    b += w.B;
-                    count++;
-
-                    Application.DoEvents();
-                }
+                comboBox1.Items.Add(top10Color.ToArgb());
             }
 
-            dominant_color = Color.FromArgb(Convert.ToInt32(r / count), Convert.ToInt32(g / count), Convert.ToInt32(b / count));
-
-            this.panel1.BackColor = dominant_color;
-            this.domColor.BackColor = dominant_color;
+            panel1.BackColor = averageColor;
+            domColor.BackColor = averageColor;
 
             draw_result();
         }
@@ -176,6 +166,11 @@ namespace WallpaperSetter
                 if (checkBox2.Checked)
                 {
                     gg.DrawImage(raw_wallpaper, new Rectangle(x, y, ScreenSize.Width, ScreenSize.Height));
+                }
+                else if (chkScaleImage.Checked)
+                {
+                    var dSize = raw_wallpaper.Size.ApplyAspect(ScreenSize);
+                    gg.DrawImage(raw_wallpaper, x, y, dSize.Width, dSize.Height);
                 }
                 else
                 {
@@ -240,14 +235,45 @@ namespace WallpaperSetter
 
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
-            domColor.BackColor = dominant_color;
+            domColor.BackColor = averageColor;
             draw_result();
+            comboBox1.SelectedIndex = -1;
         }
 
         private void btnResetPos_Click(object sender, EventArgs e)
         {
             start_x = 0;
             start_y = 0;
+            draw_result();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int dex = comboBox1.SelectedIndex;
+            if (dex < 0)
+                return;
+            Color c = Color.FromArgb((int) (comboBox1.Items[dex]));
+            domColor.BackColor = c;
+            draw_result();
+        }
+
+        private void comboBox1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+                return;
+
+            Graphics g = e.Graphics;
+            Rectangle r = e.Bounds;
+            int argb = (int)(((ComboBox) sender).Items[e.Index]);
+            Color c = Color.FromArgb(argb);
+            Brush b = new SolidBrush(c);
+            g.FillRectangle(b, r);
+        }
+
+        private void chkScaleImage_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkScaleImage.Checked)
+                checkBox2.Checked = false;
             draw_result();
         }
     }

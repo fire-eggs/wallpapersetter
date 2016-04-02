@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
@@ -29,11 +31,11 @@ namespace WallpaperSetter
 
         public static void Set(Uri uri, Style style)
         {
-            System.IO.Stream s = new System.Net.WebClient().OpenRead(uri.ToString());
+            Stream s = new WebClient().OpenRead(uri.ToString());
 
-            System.Drawing.Image img = System.Drawing.Image.FromStream(s);
+            Image img = Image.FromStream(s);
             string tempPath = Path.Combine(Path.GetTempPath(), "wallpaper.bmp");
-            img.Save(tempPath, System.Drawing.Imaging.ImageFormat.Bmp);
+            img.Save(tempPath, ImageFormat.Bmp);
 
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true);
             if (style == Style.Stretched)
@@ -99,7 +101,7 @@ namespace WallpaperSetter
         [DllImport("gdi32.dll")]
         static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
 
-        static public System.Drawing.Color GetPixelColor(int x, int y)
+        static public Color GetPixelColor(int x, int y)
         {
             IntPtr hdc = GetDC(IntPtr.Zero);
             uint pixel = GetPixel(hdc, x, y);

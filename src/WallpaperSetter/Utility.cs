@@ -1,9 +1,12 @@
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WallpaperSetter
 {
@@ -43,14 +46,14 @@ namespace WallpaperSetter
 		public static Cursor CreateColorCursorFromResourceFile(String cursorResourceName)
 		{
 			// read cursor resource binary data
-			Stream inputStream = System.Reflection.Assembly.GetExecutingAssembly().
+			Stream inputStream = Assembly.GetExecutingAssembly().
 				GetManifestResourceStream(cursorResourceName);
 			byte[] buffer = new byte[inputStream.Length];
 			inputStream.Read(buffer, 0, buffer.Length);
 			inputStream.Close();
 
 			// create temporary cursor file
-			String tmpFileName = System.IO.Path.GetRandomFileName();
+			String tmpFileName = Path.GetRandomFileName();
 			FileInfo tempFileInfo = new FileInfo(tmpFileName);
 			FileStream outputStream = tempFileInfo.Create();
 			outputStream.Write(buffer, 0, buffer.Length);
@@ -110,4 +113,137 @@ namespace WallpaperSetter
 		}
 
 	}
+
+    public static class PictureAnalysis
+    {
+        public static List<Color> Top10Colors { get; private set; }
+        public static List<Color> TenMostUsedColors {get; private set;}
+        public static List<int> TenMostUsedColorIncidences {get; private set;}
+ 
+        public static Color MostUsedColor {get; private set;}
+        public static int MostUsedColorIncidence {get; private set;}
+
+        public static Color ColorAverage { get; private set; }
+ 
+        private static int pixelColor;
+ 
+        private static Dictionary<int, int> dctColorIncidence;
+
+        public static void Analyze(Bitmap theImage)
+        {
+            int thumbSize = 32;
+            Dictionary<Color, int> colors = new Dictionary<Color, int>();
+
+            Bitmap thumbBmp =
+                new Bitmap(theImage.GetThumbnailImage(
+                    thumbSize, thumbSize, ThumbnailCallback, IntPtr.Zero));
+
+            long r = 0;
+            long g = 0;
+            long b = 0;
+
+            for (int i = 0; i < thumbSize; i++)
+            {
+                for (int j = 0; j < thumbSize; j++)
+                {
+                    Color col = thumbBmp.GetPixel(i, j);
+                    r += col.R;
+                    g += col.G;
+                    b += col.B;
+                    if (colors.ContainsKey(col))
+                        colors[col]++;
+                    else
+                        colors.Add(col, 1);
+                }
+            }
+
+            int count = thumbSize*thumbSize;
+            ColorAverage = Color.FromArgb(Convert.ToInt32(r / count), Convert.ToInt32(g / count), Convert.ToInt32(b / count));
+
+            List<KeyValuePair<Color, int>> keyValueList =
+                new List<KeyValuePair<Color, int>>(colors);
+
+            keyValueList.Sort(
+                delegate(KeyValuePair<Color, int> firstPair,
+                KeyValuePair<Color, int> nextPair)
+                {
+                    return nextPair.Value.CompareTo(firstPair.Value);
+                });
+
+            Top10Colors = new List<Color>();
+            for (int i = 0; i < 10; i++)
+                Top10Colors.Add(keyValueList[i].Key);
+
+            //string top10Colors = "";
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    top10Colors += string.Format("\n {0}. {1} > {2}",
+            //        i, keyValueList[i].Key.ToString(), keyValueList[i].Value);
+            //    flowLayoutPanel1.Controls[i].BackColor = keyValueList[i].Key;
+            //}
+            //MessageBox.Show("Top 10 Colors: " + top10Colors);
+        }
+
+        public static bool ThumbnailCallback() { return false; }
+
+        public static void GetMostUsedColor(Bitmap theBitMap)
+        {
+            TenMostUsedColors = new List<Color>();
+            TenMostUsedColorIncidences = new List<int>();
+ 
+            MostUsedColor = Color.Empty;
+            MostUsedColorIncidence = 0;
+
+            ColorAverage = Color.Empty;
+
+            // does using Dictionary<int,int> here
+            // really pay-off compared to using
+            // Dictionary<Color, int> ?
+
+            // would using a SortedDictionary be much slower, or ?
+
+            dctColorIncidence = new Dictionary<int, int>();
+            long r = 0;
+            long g = 0;
+            long b = 0;
+            // this is what you want to speed up with unmanaged code
+            for (int row = 0; row < theBitMap.Size.Width; row++)
+            {
+                for (int col = 0; col < theBitMap.Size.Height; col++)
+                {
+                    Color w = theBitMap.GetPixel(row, col);
+                    pixelColor = w.ToArgb();
+                    r += w.R;
+                    g += w.G;
+                    b += w.B;
+                    if (dctColorIncidence.Keys.Contains(pixelColor))
+                    {
+                        dctColorIncidence[pixelColor]++;
+                    }
+                    else
+                    {
+                        dctColorIncidence.Add(pixelColor, 1);
+                    }
+                }
+            }
+            long count = theBitMap.Size.Width*theBitMap.Size.Height;
+            ColorAverage = Color.FromArgb(Convert.ToInt32(r / count), Convert.ToInt32(g / count), Convert.ToInt32(b / count));
+
+            // note that there are those who argue that a
+            // .NET Generic Dictionary is never guaranteed
+            // to be sorted by methods like this
+            var dctSortedByValueHighToLow = dctColorIncidence.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+ 
+            // this should be replaced with some elegant Linq ?
+            foreach (KeyValuePair<int, int> kvp in dctSortedByValueHighToLow.Take(10))
+            {
+                TenMostUsedColors.Add(Color.FromArgb(kvp.Key));
+                TenMostUsedColorIncidences.Add(kvp.Value);
+            }
+ 
+            MostUsedColor = Color.FromArgb(dctSortedByValueHighToLow.First().Key);
+            MostUsedColorIncidence = dctSortedByValueHighToLow.First().Value;
+        }
+ 
+    }
 }

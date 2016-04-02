@@ -1,4 +1,10 @@
-This is a simple program that let you change the visible portion of a wallpaper so I you can get the canvas that you want to see.
+__Modifications in this fork:__
+
+1. Minor code cleanup.
+2. The main window is now resizable.
+3. Handle images with weird DPI values.
+
+A simple program that lets you change the visible portion of a wallpaper so I you can get the canvas that you want to see.
 
 It's very handy, especially when using minimalist wallpapers, or if the wallpaper is larger than your screen.
 

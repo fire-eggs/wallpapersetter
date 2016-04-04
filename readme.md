@@ -9,7 +9,11 @@ __Modifications in this fork:__
 3. Add true 'scale' in addition to existing 'stretch' mode.
 4. 'Dominant' color is actually 'average' color.
 5. Added combobox to pick from *most used* colors.
+6. Added 'mirror'. Two copies of the input wallpaper, with one flipped horizontally.
 
-Example below:
+Screen cap showing the current UI and mirror in action:
+![example_20160404](./wps_screen.PNG)
+
+Original Example below:
 
 ![example](https://cloud.githubusercontent.com/assets/2142305/4519973/13675d12-4cd4-11e4-84ee-f609f647b1b9.png)

@@ -19,7 +19,7 @@ namespace WallpaperSetter
             get { return pictureBox1.Size; }
         }
 
-        private bool isl = false;
+        private bool amDragging;
 
         private Point start;
 
@@ -40,13 +40,13 @@ namespace WallpaperSetter
 
             pictureBox1.MouseDown += (s, e) =>
             {
-                isl = true;
-                start = e.Location;
+                amDragging = true;  // KBR TODO: dragging should be true ONLY if the initial mouse position is within the raw_wallpaper!!!
+                start = e.Location; // KBR TODO: calc the delta relative to the raw_wallpaper ULC 
                 pictureBox1.Cursor = Cursors.Cross;
             };
             pictureBox1.MouseMove += (s, e) =>
             {
-                if (isl)
+                if (amDragging)
                 {
                     start_x += e.X - start.X;
                     start_y += e.Y - start.Y;
@@ -56,7 +56,7 @@ namespace WallpaperSetter
             };
             pictureBox1.MouseUp += (s, e) =>
             {
-                isl = false;
+                amDragging = false;
                 start = e.Location;
                 pictureBox1.Cursor = Cursors.Arrow;
                 draw_result();
@@ -136,6 +136,32 @@ namespace WallpaperSetter
 
         private Bitmap bi;
 
+        private void drawImage(Graphics gg, int in_x, int in_y, bool flip)
+        {
+            int x = Convert.ToInt32((Convert.ToDouble(in_x) / Convert.ToDouble(CanvasSize.Width)) * ScreenSize.Width);
+            int y = Convert.ToInt32((Convert.ToDouble(in_y) / Convert.ToDouble(CanvasSize.Height)) * ScreenSize.Height);
+
+            if (checkBox2.Checked)
+            {
+                // ignore flip!
+                gg.DrawImage(raw_wallpaper, new Rectangle(x, y, ScreenSize.Width, ScreenSize.Height));
+            }
+            else if (chkScaleImage.Checked)
+            {
+                var dSize = raw_wallpaper.Size.ApplyAspect(ScreenSize);
+                var w = flip ? -dSize.Width : dSize.Width;
+                gg.DrawImage(raw_wallpaper, x, y, w, dSize.Height);
+            }
+            else
+            {
+                var w = flip ? -raw_wallpaper.Width : raw_wallpaper.Width;
+                // Ignore image DPI by specifying output dimensions
+                gg.DrawImage(raw_wallpaper, x, y, w, raw_wallpaper.Height);
+            }
+        }
+
+        private double scale_factorW; // ratio of canvas to screen
+
         private void draw_result()
         {
             if (raw_wallpaper == null) return;
@@ -151,34 +177,19 @@ namespace WallpaperSetter
                 bi = new Bitmap(ScreenSize.Width, ScreenSize.Height);
             }
 
+            scale_factorW = (double)CanvasSize.Width/(double)ScreenSize.Width;
+
             using (Graphics gg = Graphics.FromImage(bi))
             {
                 gg.Clear(domColor.BackColor);
 
-                int x = Convert.ToInt32((Convert.ToDouble(start_x)/Convert.ToDouble(CanvasSize.Width))*ScreenSize.Width);
-                int y = 0;
-
-                if (checkBox1.Checked)
+                int y = checkBox1.Checked ? start_y : 0;
+                drawImage(gg, start_x, y, false);
+                if (chkMirror.Checked)
                 {
-                    y = Convert.ToInt32((Convert.ToDouble(start_y)/Convert.ToDouble(CanvasSize.Height))*ScreenSize.Height);
+                    int x2 = CanvasSize.Width - start_x; // necessary if NOT flipping: - (int)(raw_wallpaper.Width * scale_factorW);
+                    drawImage(gg, x2, y, true);
                 }
-
-                if (checkBox2.Checked)
-                {
-                    gg.DrawImage(raw_wallpaper, new Rectangle(x, y, ScreenSize.Width, ScreenSize.Height));
-                }
-                else if (chkScaleImage.Checked)
-                {
-                    var dSize = raw_wallpaper.Size.ApplyAspect(ScreenSize);
-                    gg.DrawImage(raw_wallpaper, x, y, dSize.Width, dSize.Height);
-                }
-                else
-                {
-                    // Ignore image DPI 
-                    gg.DrawImage(raw_wallpaper, x, y, raw_wallpaper.Width, raw_wallpaper.Height);
-                }
-
-             //   gg.Dispose();
             }
             pictureBox1.Image = bi;
         }
@@ -273,6 +284,13 @@ namespace WallpaperSetter
         private void chkScaleImage_CheckedChanged(object sender, EventArgs e)
         {
             if (chkScaleImage.Checked)
+                checkBox2.Checked = false;
+            draw_result();
+        }
+
+        private void chkMirror_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkMirror.Checked)
                 checkBox2.Checked = false;
             draw_result();
         }

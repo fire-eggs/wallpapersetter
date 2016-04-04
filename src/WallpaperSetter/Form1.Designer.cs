@@ -48,6 +48,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkMirror = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -123,12 +124,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkMirror);
             this.groupBox1.Controls.Add(this.chkScaleImage);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.checkBox2);
             this.groupBox1.Location = new System.Drawing.Point(231, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(128, 79);
+            this.groupBox1.Size = new System.Drawing.Size(128, 90);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
@@ -268,9 +270,20 @@
             this.groupBox3.Location = new System.Drawing.Point(0, 344);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1005, 83);
+            this.groupBox3.Size = new System.Drawing.Size(1005, 100);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
+            // 
+            // chkMirror
+            // 
+            this.chkMirror.AutoSize = true;
+            this.chkMirror.Location = new System.Drawing.Point(7, 67);
+            this.chkMirror.Name = "chkMirror";
+            this.chkMirror.Size = new System.Drawing.Size(52, 17);
+            this.chkMirror.TabIndex = 9;
+            this.chkMirror.Text = "Mirror";
+            this.chkMirror.UseVisualStyleBackColor = true;
+            this.chkMirror.CheckedChanged += new System.EventHandler(this.chkMirror_CheckedChanged);
             // 
             // Form1
             // 
@@ -315,6 +328,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.CheckBox chkScaleImage;
+        private System.Windows.Forms.CheckBox chkMirror;
     }
 }
 

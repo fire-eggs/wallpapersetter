@@ -30,6 +30,8 @@ namespace WallpaperSetter
         Bitmap m_ScreenImage;
         readonly Cursor m_eyeDropperCursor = Utility.CreateColorCursorFromResourceFile("WallpaperSetter.EyeDrop.cur");
 
+        private Color _backColor;
+
         public Form1()
         {
             Point mCursorLocation;
@@ -70,14 +72,14 @@ namespace WallpaperSetter
                 m_ScreenImage = Utility.CaptureScreen();
 
                 mCursorLocation = Utility.GetCursorPostionOnScreen();
-                domColor.BackColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
+                _backColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
             };
             btnDropper.MouseMove += (s, e) =>
             {
                 if (m_MouseDownInEyedropper)
                 {
                     mCursorLocation = Utility.GetCursorPostionOnScreen();
-                    domColor.BackColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
+                    _backColor = m_ScreenImage.GetPixel(mCursorLocation.X, mCursorLocation.Y);
                     draw_result();
                 }
             };
@@ -129,7 +131,7 @@ namespace WallpaperSetter
             }
 
             panel1.BackColor = averageColor;
-            domColor.BackColor = averageColor;
+            _backColor = averageColor;
 
             draw_result();
         }
@@ -181,7 +183,7 @@ namespace WallpaperSetter
 
             using (Graphics gg = Graphics.FromImage(bi))
             {
-                gg.Clear(domColor.BackColor);
+                gg.Clear(_backColor);
 
                 int y = checkBox1.Checked ? start_y : 0;
                 drawImage(gg, start_x, y, false);
@@ -246,7 +248,7 @@ namespace WallpaperSetter
 
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
-            domColor.BackColor = averageColor;
+            _backColor = averageColor;
             draw_result();
             comboBox1.SelectedIndex = -1;
         }
@@ -264,7 +266,7 @@ namespace WallpaperSetter
             if (dex < 0)
                 return;
             Color c = Color.FromArgb((int) (comboBox1.Items[dex]));
-            domColor.BackColor = c;
+            _backColor = c;
             draw_result();
         }
 
